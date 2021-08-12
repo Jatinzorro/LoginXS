@@ -6,8 +6,7 @@ import com.login.entity.Student;
 import com.login.exceptions.StudentException;
 
 public interface StudentService {
-	boolean addStudent(Student stu);
+	boolean addStudent(Student stu)throws StudentException;
 	String login(String phoneNumber,String password)throws StudentException;
 	String updatePassword(Student stu)throws StudentException;
-	List getAllStudents();
 }

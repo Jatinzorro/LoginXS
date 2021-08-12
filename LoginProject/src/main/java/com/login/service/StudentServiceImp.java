@@ -19,11 +19,15 @@ public class StudentServiceImp implements StudentService {
 	
 	/*This method will call the DAO for adding a new Student */
 	@Override
-	public boolean addStudent(Student stu) {
-		
+	public boolean addStudent(Student stu)throws StudentException {
+		if(dao.checkStudent(stu.getPhoneNumber())==true) {
+			throw new StudentException("Student Already Exist, Plz Enter the new phoneNumber for registrartion");
+		}
 		return dao.addStudent(stu);
 	}
 
+	
+	
 	
 	
 	/*This Method will call the StudentDao to  check weather the user exist and
@@ -43,16 +47,30 @@ public class StudentServiceImp implements StudentService {
 		return "Welcome Student "+ stu.getPhoneNumber() +" You Have Been SUCCESSFULLY Logged IN";
 	}
 
+	
+	
+	
+	
+	/*Update Functionality
+	 * To  Update the password of Student, throws exception if student not there in database
+	 */
+	
+	//Helper MEthod for Update Method, returns the Student Object of Provided Phone Number
+	public Student viewStudent(String phoneNumber) {
+		return dao.viewStudent(phoneNumber);
+	}
 	@Override
 	public String updatePassword(Student stu) throws StudentException{
-		
-		return null;
+		String phoneNumber=stu.getPhoneNumber();
+		Student student1=viewStudent(phoneNumber);
+		if(student1!=null) {
+			dao.updatePassword(stu);
+			return "Password Updated SUCCESSFULLY!";
+		}else {
+			throw new StudentException("This Phone Number Is Not Present In Database");
+		}
 	}
 
-	@Override
-	public List getAllStudents() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
 
 }

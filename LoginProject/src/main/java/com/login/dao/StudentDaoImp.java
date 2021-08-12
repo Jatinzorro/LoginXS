@@ -1,7 +1,11 @@
 package com.login.dao;
 
+import java.util.List;
+import java.util.Optional;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import org.springframework.stereotype.Repository;
@@ -46,16 +50,32 @@ public class StudentDaoImp implements StudentDAO {
 
 	
 	
+	
+	/*Update Functionality
+	 * Below given methods update the student password given in the DATABASE
+	 */
+	//Helper Method For Update Functionality: It return the Student whose phone number is given
+	
+	public List<Student> viewStudent() {
+		Query query=em.createQuery("from Student s");
+		return query.getResultList();
+	}
+	
 	@Override
 	public Student viewStudent(String phoneNumber) {
-		// TODO Auto-generated method stub
-		return null;
+		List<Student> list =viewStudent();
+		Student student=null;
+		Optional <Student> optional=list.stream().filter(s1->s1.getPhoneNumber().equals(phoneNumber)).findFirst();
+		
+		if(optional.isPresent()) {
+			student=optional.get();
+		}
+		return student;
 	}
-
 	@Override
 	public String updatePassword(Student stu) {
-		// TODO Auto-generated method stub
-		return null;
+		em.merge(stu);
+		return "Updated SUCCESSFULLY!";
 	}
 
 }
